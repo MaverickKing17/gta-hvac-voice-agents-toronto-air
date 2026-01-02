@@ -1,20 +1,20 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+GTA HVAC AI Voice Fleet 2026
+Revolutionizing Lead Capture for Toronto's Heating & Cooling Specialists.
 
-# Run and deploy your AI Studio app
+This repository contains the logic and deployment frameworks for specialized AI Voice Agents (Sarah and Marcus) built specifically for the GTA HVAC market. These agents are designed to replace traditional, slow contact forms with instant, technically-accurate voice engagement.
 
-This contains everything you need to run your app locally.
+The Business Problem
+The "Lead Leak": 40% of HVAC leads are lost because calls go to voicemail or contact forms are not answered within 10 minutes.
 
-View your app in AI Studio: https://ai.studio/apps/drive/1xW7C6ON6nXvDtyDhXZyu01sUg-tE_gtk
+Rebate Confusion: Homeowners are overwhelmed by the 2026 Home Renovation Savings (HRS) program.
 
-## Run Locally
+Dispatch Delays: Human dispatchers often lack the technical depth to triage heritage home emergencies vs. routine maintenance.
 
-**Prerequisites:**  Node.js
+The AI Solution (The ROI)
+Instant Triage: Every call is answered on the first ring, 24/7/365.
 
+Financial Accuracy: Agents are hard-coded with the 2026 rebate logic—instantly identifying the $7,500 electric-to-heat-pump tier vs. the $2,000 gas tier.
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+Priority Routing: Emergency leaks or no-heat situations are flagged for a 4-hour response guarantee, while routine leads are pushed to a Google Sheets Lead Tracker for Mike.
+
+Hyper-Local Expertise: Specialized personas like Marcus provide technical reassurance for heritage Toronto homes (boilers, radiators, and older hydronic systems).
