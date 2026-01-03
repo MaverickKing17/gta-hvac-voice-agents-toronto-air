@@ -92,7 +92,7 @@ export const useGeminiLive = ({ onLeadCaptured }: UseGeminiLiveProps) => {
           onopen: async () => {
             setIsConnected(true);
             setIsConnecting(false);
-            addMessage('system', 'Neural uplink established. Melissa is online.');
+            addMessage('system', 'Neural uplink established. Toronto Air Systems Service Agent is online.');
             
             try {
               const stream = await navigator.mediaDevices.getUserMedia({ 
