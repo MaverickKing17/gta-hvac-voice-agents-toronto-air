@@ -15,31 +15,33 @@ export const Transcript: React.FC<TranscriptProps> = ({ messages }) => {
 
   return (
     <div className="h-full flex flex-col font-mono text-sm overflow-hidden bg-transparent">
-      <div className="flex-1 overflow-y-auto px-8 py-6 space-y-6 custom-scrollbar">
+      <div className="flex-1 overflow-y-auto px-10 py-8 space-y-8 custom-scrollbar">
         {messages.length === 0 && (
-          <div className="h-full flex flex-col items-center justify-center text-slate-600 gap-4 opacity-30">
-            <Sparkles className="w-12 h-12" />
-            <span className="text-xs font-bold uppercase tracking-[0.3em]">Initialize Uplink</span>
+          <div className="h-full flex flex-col items-center justify-center text-slate-700 gap-6 opacity-40">
+            <div className="w-16 h-16 rounded-3xl border-2 border-dashed border-slate-700 flex items-center justify-center animate-[spin_20s_linear_infinite]">
+                 <Sparkles className="w-8 h-8" />
+            </div>
+            <span className="text-xs font-black uppercase tracking-[0.4em]">Initialize Neural Uplink</span>
           </div>
         )}
         
         {messages.map((msg) => (
-          <div key={msg.id} className={`flex flex-col gap-2 ${msg.role === 'user' ? 'items-end' : 'items-start'}`}>
-            <div className={`flex items-center gap-2 mb-1 opacity-50 ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}>
-              <div className="w-5 h-5 rounded flex items-center justify-center bg-white/5 border border-white/5">
-                {msg.role === 'user' ? <User className="w-3 h-3" /> : msg.role === 'system' ? <Terminal className="w-3 h-3" /> : <Bot className="w-3 h-3" />}
+          <div key={msg.id} className={`flex flex-col gap-3 ${msg.role === 'user' ? 'items-end' : 'items-start'}`}>
+            <div className={`flex items-center gap-3 mb-1 opacity-60 ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}>
+              <div className={`w-6 h-6 rounded-lg flex items-center justify-center bg-white/5 border border-white/10 ${msg.role === 'agent' ? 'text-sky-400' : 'text-slate-500'}`}>
+                {msg.role === 'user' ? <User className="w-3.5 h-3.5" /> : msg.role === 'system' ? <Terminal className="w-3.5 h-3.5" /> : <Bot className="w-3.5 h-3.5" />}
               </div>
-              <span className="text-[10px] font-bold uppercase tracking-widest">
-                {msg.role === 'user' ? 'Caller' : msg.role === 'system' ? 'Kernel' : 'Marcus AI'}
+              <span className="text-[10px] font-black uppercase tracking-[0.2em] font-sans">
+                {msg.role === 'user' ? 'Lead Subject' : msg.role === 'system' ? 'Kernel Event' : 'Marcus AI Agent'}
               </span>
             </div>
             
-            <div className={`max-w-[85%] px-5 py-3 rounded-2xl transition-all duration-500 animate-in fade-in slide-in-from-bottom-2 ${
+            <div className={`max-w-[85%] px-6 py-4 rounded-[1.5rem] transition-all duration-700 animate-in fade-in slide-in-from-bottom-4 shadow-xl leading-relaxed ${
               msg.role === 'user' 
-                ? 'bg-sky-500/10 text-sky-100 border border-sky-500/20 rounded-tr-none' 
+                ? 'bg-sky-500 text-white border-0 rounded-tr-none' 
                 : msg.role === 'system' 
-                  ? 'bg-transparent text-slate-500 text-xs italic'
-                  : 'bg-white/5 text-slate-200 border border-white/10 rounded-tl-none backdrop-blur-sm'
+                  ? 'bg-transparent text-slate-500 text-xs italic border-l-2 border-slate-800 rounded-none'
+                  : 'bg-white/[0.05] text-slate-100 border border-white/10 rounded-tl-none backdrop-blur-md'
             }`}>
               {msg.text}
             </div>
