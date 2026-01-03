@@ -1,7 +1,18 @@
 
 import React from 'react';
 import { LeadDetails } from '../types';
-import { ShieldCheck, User, Phone, MapPin, Database, Zap, Cpu, ArrowRight, Info, CheckCircle2, TrendingUp } from 'lucide-react';
+import { 
+  ShieldCheck, 
+  User, 
+  Phone, 
+  MapPin, 
+  Zap, 
+  ArrowRight, 
+  CheckCircle2, 
+  FileText,
+  BadgeAlert,
+  Home
+} from 'lucide-react';
 
 interface InfoPanelProps {
   lead: Partial<LeadDetails>;
@@ -9,147 +20,148 @@ interface InfoPanelProps {
 }
 
 export const InfoPanel: React.FC<InfoPanelProps> = ({ lead, isConnected }) => {
+  // Simple heuristic for heritage detection
+  const isHeritage = lead.address?.toLowerCase().includes('heritage') || 
+                     lead.heatingSource === 'oil';
+
   return (
-    <div className="p-12 pb-6 relative overflow-hidden">
+    <div className="p-12 pb-8 relative overflow-hidden bg-white">
       
-      <div className="mb-10">
-        <div className="flex items-center gap-3 mb-3">
-            <div className="w-2.5 h-2.5 rounded-full bg-blue-600 shadow-[0_0_10px_rgba(37,99,235,0.4)]" />
-            <h3 className="text-[11px] font-black text-blue-600 uppercase tracking-[0.4em]">Dispatch Analytics</h3>
+      <div className="mb-12 flex justify-between items-start">
+        <div>
+          <div className="flex items-center gap-2 mb-3">
+              <FileText className="w-4 h-4 text-[#003366]" />
+              <h3 className="text-[11px] font-black text-[#003366] uppercase tracking-[0.4em]">Dispatch Authorization</h3>
+          </div>
+          <h2 className="text-4xl font-black text-[#001f3f] tracking-tighter uppercase leading-none italic">
+              Active Ticket
+          </h2>
         </div>
-        <h2 className="text-4xl font-black text-slate-900 tracking-tighter uppercase leading-none italic">
-            Live Acquisition
-        </h2>
+        {isHeritage && (
+          <div className="flex flex-col items-end animate-in fade-in slide-in-from-right duration-700">
+            <div className="px-3 py-1.5 bg-[#003366] text-white rounded-lg flex items-center gap-2 shadow-lg">
+              <Home className="w-3.5 h-3.5" />
+              <span className="text-[9px] font-black uppercase tracking-widest">Heritage Profile</span>
+            </div>
+          </div>
+        )}
       </div>
 
-      <div className="space-y-1 mb-10 pr-2">
+      <div className="space-y-1 mb-12">
         <LeadField 
-          label="Subject Identity" 
+          label="Customer Identity" 
           value={lead.name} 
           icon={<User className="w-5 h-5" />} 
           active={isConnected}
-          color="blue"
         />
         <LeadField 
-          label="Secure Contact Link" 
+          label="Verified Phone" 
           value={lead.phone} 
           icon={<Phone className="w-5 h-5" />} 
           active={isConnected}
-          color="indigo"
         />
         <LeadField 
-          label="Geospatial Address" 
+          label="Service Address" 
           value={lead.address} 
           icon={<MapPin className="w-5 h-5" />} 
           active={isConnected}
-          color="cyan"
         />
 
-        <div className="pt-8 grid grid-cols-2 gap-4">
-             <div className={`group p-6 rounded-3xl border transition-all duration-700 relative overflow-hidden ${lead.type ? 'bg-blue-50/50 border-blue-200' : 'bg-slate-50 border-slate-100'}`}>
-                {lead.type && <div className="absolute top-0 right-0 w-16 h-16 bg-blue-600/5 rounded-full -mr-8 -mt-8" />}
-                <div className="flex items-center gap-2 mb-2 relative z-10">
-                   <Database className="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-600 transition-colors" />
-                   <div className="text-[9px] text-slate-400 uppercase font-black tracking-widest">Priority Class</div>
+        <div className="pt-10 grid grid-cols-2 gap-5">
+             <div className={`group p-6 rounded-2xl border-2 transition-all duration-700 relative overflow-hidden ${lead.type === 'emergency' ? 'bg-[#cc0000]/5 border-[#cc0000]/20' : lead.type ? 'bg-[#003366]/5 border-[#003366]/20' : 'bg-slate-50 border-slate-100'}`}>
+                <div className="flex items-center gap-2 mb-3">
+                   <BadgeAlert className={`w-4 h-4 ${lead.type === 'emergency' ? 'text-[#cc0000]' : 'text-[#003366]'}`} />
+                   <div className="text-[9px] text-slate-400 uppercase font-black tracking-widest">Inquiry Class</div>
                 </div>
-                <div className={`text-base font-black uppercase tracking-tight relative z-10 ${lead.type === 'emergency' ? 'text-rose-600' : lead.type ? 'text-slate-900' : 'text-slate-300 italic'}`}>
-                  {lead.type || 'Standby'}
+                <div className={`text-base font-black uppercase tracking-tight ${lead.type === 'emergency' ? 'text-[#cc0000]' : lead.type ? 'text-[#003366]' : 'text-slate-300 italic'}`}>
+                  {lead.type || 'Monitoring...'}
                 </div>
              </div>
              
-             <div className={`group p-6 rounded-3xl border transition-all duration-700 relative overflow-hidden ${lead.heatingSource ? 'bg-amber-50/50 border-amber-200' : 'bg-slate-50 border-slate-100'}`}>
-                {lead.heatingSource && <div className="absolute top-0 right-0 w-16 h-16 bg-amber-600/5 rounded-full -mr-8 -mt-8" />}
-                <div className="flex items-center gap-2 mb-2 relative z-10">
-                   <Zap className="w-3.5 h-3.5 text-slate-400 group-hover:text-amber-500 transition-colors" />
+             <div className={`group p-6 rounded-2xl border-2 transition-all duration-700 relative overflow-hidden ${lead.heatingSource ? 'bg-[#0099cc]/5 border-[#0099cc]/20' : 'bg-slate-50 border-slate-100'}`}>
+                <div className="flex items-center gap-2 mb-3">
+                   <Zap className="w-4 h-4 text-[#0099cc]" />
                    <div className="text-[9px] text-slate-400 uppercase font-black tracking-widest">Energy Vector</div>
                 </div>
-                <div className={`text-base font-black uppercase tracking-tight relative z-10 ${lead.heatingSource ? 'text-slate-900' : 'text-slate-300 italic'}`}>
+                <div className={`text-base font-black uppercase tracking-tight ${lead.heatingSource ? 'text-[#001f3f]' : 'text-slate-300 italic'}`}>
                   {lead.heatingSource || 'Awaiting'}
                 </div>
              </div>
         </div>
       </div>
 
-      {/* Verified Rebate Visualization */}
-      <div className="mb-10">
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-2">
-            <TrendingUp className="w-4 h-4 text-emerald-500" />
-            <span className="text-[11px] font-black text-slate-500 uppercase tracking-[0.2em]">GTA Subsidy Performance</span>
-          </div>
-          <span className="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">Live Market Sync</span>
+      {/* Corporate Rebate Strategy Layer */}
+      <div className="mb-8">
+        <div className="flex items-center gap-2 mb-6">
+          <span className="text-[11px] font-black text-slate-400 uppercase tracking-[0.3em]">Qualified Incentive Tiers</span>
         </div>
         
-        <div className="space-y-4">
-          <RebateCard 
-            title="HRS Primary Grant"
-            amount="$7,500"
-            sources="Electric / Oil"
-            isSelected={lead.heatingSource === 'electric' || lead.heatingSource === 'oil'}
-            color="emerald"
-          />
-          <RebateCard 
-            title="Efficiency Rebate"
-            amount="$2,000"
-            sources="Natural Gas"
-            isSelected={lead.heatingSource === 'gas'}
-            color="blue"
-          />
+        <div className="grid grid-cols-1 gap-4">
+          <div className={`p-6 rounded-3xl border-2 transition-all duration-500 relative ${lead.heatingSource === 'electric' || lead.heatingSource === 'oil' ? 'bg-[#003366] border-[#003366] shadow-2xl scale-[1.02]' : 'bg-white border-slate-100'}`}>
+            <div className="flex justify-between items-start mb-4">
+              <span className={`text-[10px] font-black uppercase tracking-widest ${lead.heatingSource === 'electric' || lead.heatingSource === 'oil' ? 'text-blue-200' : 'text-[#003366]'}`}>HRS Program</span>
+              { (lead.heatingSource === 'electric' || lead.heatingSource === 'oil') && <CheckCircle2 className="w-5 h-5 text-emerald-400" /> }
+            </div>
+            <div className="flex items-baseline gap-3">
+              <span className={`text-4xl font-black tracking-tighter ${lead.heatingSource === 'electric' || lead.heatingSource === 'oil' ? 'text-white' : 'text-slate-900'}`}>$7,500</span>
+              <span className={`text-[10px] font-bold uppercase ${lead.heatingSource === 'electric' || lead.heatingSource === 'oil' ? 'text-white/40' : 'text-slate-400'}`}>Qualified Grant</span>
+            </div>
+          </div>
+
+          <div className={`p-6 rounded-3xl border-2 transition-all duration-500 relative ${lead.heatingSource === 'gas' ? 'bg-[#003366] border-[#003366] shadow-2xl scale-[1.02]' : 'bg-white border-slate-100'}`}>
+            <div className="flex justify-between items-start mb-4">
+              <span className={`text-[10px] font-black uppercase tracking-widest ${lead.heatingSource === 'gas' ? 'text-blue-200' : 'text-[#003366]'}`}>Efficiency Rebate</span>
+              { lead.heatingSource === 'gas' && <CheckCircle2 className="w-5 h-5 text-emerald-400" /> }
+            </div>
+            <div className="flex items-baseline gap-3">
+              <span className={`text-4xl font-black tracking-tighter ${lead.heatingSource === 'gas' ? 'text-white' : 'text-slate-900'}`}>$2,000</span>
+              <span className={`text-[10px] font-bold uppercase ${lead.heatingSource === 'gas' ? 'text-white/40' : 'text-slate-400'}`}>Qualified Grant</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="relative group mt-auto">
+        <div className="absolute -inset-1 bg-gradient-to-r from-[#003366] to-[#0099cc] rounded-[2.5rem] blur-xl opacity-10 group-hover:opacity-20 transition duration-1000"></div>
+        <div className="relative bg-[#001f3f] border border-white/5 p-10 rounded-[2.5rem] shadow-2xl overflow-hidden">
+            <div className="relative z-10 flex flex-col gap-6">
+                <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-black text-[#0099cc] uppercase tracking-[0.4em]">Status: Priority Locked</span>
+                    <ShieldCheck className="w-5 h-5 text-emerald-500" />
+                </div>
+                <div className="flex items-baseline gap-4">
+                    <span className="text-5xl font-black text-white tracking-tighter leading-none">
+                      {lead.heatingSource === 'gas' ? '$2,000' : '$7,500'}
+                    </span>
+                    <span className="text-[11px] text-white/40 font-bold uppercase tracking-widest">Est. Incentive</span>
+                </div>
+                <button className="w-full py-5 bg-[#cc0000] text-white rounded-2xl text-[12px] font-black uppercase tracking-[0.2em] flex items-center justify-center gap-3 hover:bg-[#b30000] transition-all shadow-xl group-hover:translate-y-[-2px]">
+                  Confirm Dispatch Booking <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </button>
+                <p className="text-[9px] text-white/30 text-center leading-relaxed font-medium">
+                  Toronto Air Systems 100% Satisfaction Guarantee Included. <br/>
+                  Fixed-price quote issued upon visual diagnostic.
+                </p>
+            </div>
         </div>
       </div>
     </div>
   );
 };
 
-const RebateCard = ({ title, amount, sources, isSelected, color }: any) => {
-  const colorStyles = {
-    emerald: isSelected ? 'bg-emerald-50 border-emerald-200 ring-emerald-500/10' : 'border-slate-100',
-    blue: isSelected ? 'bg-blue-50 border-blue-200 ring-blue-500/10' : 'border-slate-100'
-  };
-  const accentText = color === 'emerald' ? 'text-emerald-600' : 'text-blue-600';
-  const iconColor = color === 'emerald' ? 'text-emerald-500' : 'text-blue-500';
-
-  return (
-    <div className={`p-6 rounded-[2rem] border transition-all duration-500 relative overflow-hidden group ${isSelected ? colorStyles[color as keyof typeof colorStyles] + ' ring-4 shadow-xl' : colorStyles[color as keyof typeof colorStyles] + ' bg-white hover:bg-slate-50'}`}>
-      <div className="flex justify-between items-start mb-3">
-        <div className={`text-[10px] font-black uppercase tracking-widest ${isSelected ? accentText : 'text-slate-400'}`}>{title}</div>
-        {isSelected && <div className={`px-2.5 py-1 ${color === 'emerald' ? 'bg-emerald-100 text-emerald-700' : 'bg-blue-100 text-blue-700'} text-[9px] font-black rounded-xl uppercase tracking-tighter`}>Detected</div>}
-      </div>
-      <div className="flex items-baseline gap-2 mb-4">
-        <span className={`text-3xl font-black tracking-tighter ${isSelected ? 'text-slate-900' : 'text-slate-400'}`}>{amount}</span>
-        <span className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Max Funding</span>
-      </div>
-      <div className="flex items-center gap-2 text-[11px] text-slate-500 font-bold">
-        <CheckCircle2 className={`w-4 h-4 ${isSelected ? iconColor : 'text-slate-200'}`} />
-        <span className={isSelected ? 'text-slate-700' : 'text-slate-400'}>Qualified: {sources}</span>
-      </div>
-    </div>
-  );
-};
-
-const LeadField = ({ label, value, icon, active, color }: { label: string, value?: string, icon: React.ReactNode, active: boolean, color: string }) => {
-  const colorMap = {
-    blue: 'bg-blue-600 shadow-blue-200',
-    indigo: 'bg-indigo-600 shadow-indigo-200',
-    cyan: 'bg-cyan-500 shadow-cyan-200'
-  };
-
-  return (
-    <div className={`group flex items-center justify-between py-6 transition-all duration-500 border-b border-slate-100 hover:border-blue-100`}>
-        <div className="flex items-center gap-7">
-            <div className={`p-3.5 rounded-2xl transition-all duration-500 ${value ? colorMap[color as keyof typeof colorMap] + ' text-white shadow-xl scale-110' : 'bg-slate-50 text-slate-300'}`}>
+const LeadField = ({ label, value, icon, active }: { label: string, value?: string, icon: React.ReactNode, active: boolean }) => (
+    <div className={`group flex items-center justify-between py-6 transition-all duration-500 border-b border-slate-100 hover:border-[#003366]/20`}>
+        <div className="flex items-center gap-8">
+            <div className={`p-4 rounded-2xl transition-all duration-500 ${value ? 'bg-[#003366] text-white shadow-xl scale-110' : 'bg-slate-50 text-slate-300'}`}>
                 {React.cloneElement(icon as React.ReactElement, { className: 'w-5 h-5' })}
             </div>
             <div className="flex flex-col">
-              <span className="text-[9px] font-black text-slate-400 uppercase tracking-[0.25em] mb-1">{label}</span>
-              <span className={`text-lg font-bold transition-all ${value ? 'text-slate-900' : active ? 'text-slate-300 italic animate-pulse' : 'text-slate-200'}`}>
-                  {value || (active ? 'Monitoring...' : 'Terminal Offline')}
+              <span className="text-[9px] font-black text-slate-400 uppercase tracking-[0.3em] mb-1">{label}</span>
+              <span className={`text-xl font-bold transition-all ${value ? 'text-[#001f3f]' : active ? 'text-slate-300 italic animate-pulse' : 'text-slate-200'}`}>
+                  {value || (active ? 'Listening for input...' : 'Link Offline')}
               </span>
             </div>
         </div>
-        {value && (
-          <div className={`w-3 h-3 rounded-full ${colorMap[color as keyof typeof colorMap].split(' ')[0]} shadow-[0_0_15px_rgba(0,0,0,0.2)] animate-in zoom-in duration-700`} />
-        )}
+        {value && <CheckCircle2 className="w-5 h-5 text-emerald-500 animate-in zoom-in duration-500" />}
     </div>
-  );
-};
+);
