@@ -99,30 +99,30 @@ const App: React.FC = () => {
                 <div className="flex items-center gap-4 mt-2">
                    <div className={`flex items-center gap-3 px-3 py-1 rounded-lg border transition-all duration-700 ${
                      isConnected 
-                      ? (isEmergency ? 'bg-rose-500/20 border-rose-500/40 text-rose-300' : 'bg-emerald-500/20 border-emerald-500/40 text-emerald-300')
-                      : 'bg-white/5 border-white/10 text-white/30'
+                      ? (isEmergency ? 'bg-rose-500/30 border-rose-500/80 text-white' : 'bg-emerald-500/30 border-emerald-500/80 text-white')
+                      : 'bg-white/20 border-white/40 text-white shadow-lg'
                    }`}>
-                      <div className={`w-2 h-2 rounded-full ${isConnected ? (isEmergency ? 'bg-rose-400 animate-pulse' : 'bg-emerald-400 animate-pulse') : 'bg-white/20'}`} />
-                      <span className="text-[10px] font-black uppercase tracking-wider">
-                        {isConnected ? `${currentAgentName} ACTIVE` : 'DISCONNECTED'}
+                      <div className={`w-2.5 h-2.5 rounded-full ${isConnected ? (isEmergency ? 'bg-rose-400 animate-pulse' : 'bg-emerald-400 animate-pulse') : 'bg-white/60'}`} />
+                      <span className="text-[11px] font-black uppercase tracking-wider">
+                        {isConnected ? `${currentAgentName} ACTIVE` : 'OFFLINE'}
                       </span>
                    </div>
                    <div className="flex items-center gap-2">
-                      <Signal className={`w-3 h-3 ${isConnected ? 'text-white/60' : 'text-white/10'}`} />
-                      <span className="text-[9px] font-mono font-bold text-white/30 uppercase tracking-widest">ENCRYPTED LINE</span>
+                      <Signal className={`w-3.5 h-3.5 ${isConnected ? 'text-white' : 'text-white/60'}`} />
+                      <span className="text-[10px] font-mono font-bold text-white uppercase tracking-widest">SECURE LINK</span>
                    </div>
                 </div>
               </div>
            </div>
            
-           {/* Agent Switcher - Re-styled as 'Select Department' */}
-           <div className="flex items-center gap-1.5 bg-white/5 p-1 rounded-2xl border border-white/10">
+           {/* Agent Switcher */}
+           <div className="flex items-center gap-2 bg-white/20 p-1.5 rounded-2xl border border-white/30">
               <button 
                 onClick={() => togglePersona('sarah')}
                 className={`flex items-center gap-3 px-6 py-2.5 rounded-xl transition-all duration-500 ${
                   leadDetails.agentPersona === 'sarah' 
                   ? 'bg-white text-slate-900 shadow-lg' 
-                  : 'text-white/40 hover:text-white/60'
+                  : 'text-white/80 hover:text-white hover:bg-white/10'
                 }`}
               >
                 <Headset className="w-4 h-4" />
@@ -134,7 +134,7 @@ const App: React.FC = () => {
                 className={`flex items-center gap-3 px-6 py-2.5 rounded-xl transition-all duration-500 ${
                   leadDetails.agentPersona === 'mike' 
                   ? 'bg-rose-600 text-white shadow-lg' 
-                  : 'text-white/40 hover:text-white/60'
+                  : 'text-white/80 hover:text-white hover:bg-white/10'
                 }`}
               >
                 <Radio className="w-4 h-4" />
@@ -145,14 +145,14 @@ const App: React.FC = () => {
 
         <div className="flex items-center gap-8">
            {isConnected && (
-             <div className="flex items-center gap-8 pr-8 border-r border-white/10 animate-in fade-in slide-in-from-right-10">
+             <div className="flex items-center gap-8 pr-8 border-r border-white/20 animate-in fade-in slide-in-from-right-10">
                 <div className="text-right">
-                    <div className="text-[9px] font-black text-white/30 uppercase tracking-widest mb-1">CALL DURATION</div>
-                    <div className="text-2xl font-mono font-bold text-white tabular-nums">{formatDuration(sessionDuration)}</div>
+                    <div className="text-[9px] font-black text-white uppercase tracking-widest mb-1">CALL DURATION</div>
+                    <div className="text-2xl font-mono font-bold text-white tabular-nums leading-none">{formatDuration(sessionDuration)}</div>
                 </div>
                 <div>
-                    <div className="text-[9px] font-black text-white/30 uppercase tracking-widest mb-1">DATA NODE</div>
-                    <div className="text-xs font-bold text-blue-400 bg-blue-500/10 px-3 py-1 rounded-lg border border-blue-500/20">GTA-SOUTH</div>
+                    <div className="text-[9px] font-black text-white uppercase tracking-widest mb-1">DATA NODE</div>
+                    <div className="text-sm font-black text-blue-400 bg-blue-500/20 px-4 py-1.5 rounded-lg border border-blue-500/60 leading-none">GTA-SOUTH</div>
                 </div>
              </div>
            )}
@@ -162,14 +162,14 @@ const App: React.FC = () => {
               onClick={() => isConnected ? disconnect() : connect()}
               className={`group relative flex items-center gap-5 px-10 py-5 rounded-2xl font-black text-xs transition-all active:scale-95 uppercase tracking-[0.2em] shadow-xl overflow-hidden ${
                   isConnected 
-                  ? 'bg-rose-950/30 text-rose-500 border border-rose-500/40' 
+                  ? 'bg-rose-900/60 text-white border-2 border-rose-500' 
                   : isConnecting
-                    ? 'bg-white/5 text-white/20 border-white/10 border'
-                    : 'bg-gradient-to-br from-blue-600 to-indigo-700 text-white shadow-blue-900/20 border border-blue-400/30 hover:scale-105'
+                    ? 'bg-white/10 text-white/80 border-white/40 border-2'
+                    : 'bg-gradient-to-br from-blue-600 to-indigo-700 text-white shadow-blue-900/50 border-2 border-blue-400 hover:scale-105'
               }`}
            >
               {isConnecting ? <Loader2 className="w-5 h-5 animate-spin" /> : isConnected ? <Power className="w-5 h-5" /> : <PhoneCall className="w-5 h-5" />}
-              <span>{isConnecting ? 'CONNECTING...' : isConnected ? 'END SESSION' : 'START LIVE DISPATCH'}</span>
+              <span>{isConnecting ? 'ESTABLISHING...' : isConnected ? 'END SESSION' : 'START LIVE DISPATCH'}</span>
            </button>
         </div>
       </header>
@@ -179,27 +179,27 @@ const App: React.FC = () => {
         {/* Main Work Area */}
         <section className="flex-1 flex flex-col bg-black/40 backdrop-blur-sm border-r border-white/10 overflow-hidden">
             
-            {/* Audio Visualization - Slightly more 'Utility' focused */}
-            <div className={`h-[40%] relative flex items-center justify-center overflow-hidden border-b border-white/10 transition-all duration-1000 ${isEmergency ? 'bg-rose-950/5' : 'bg-blue-950/5'}`}>
+            {/* Audio Visualization */}
+            <div className={`h-[40%] relative flex items-center justify-center overflow-hidden border-b border-white/10 transition-all duration-1000 ${isEmergency ? 'bg-rose-950/20' : 'bg-blue-950/20'}`}>
                 <div className="w-full h-full relative z-10">
                     <WaveVisualizer isConnected={isConnected} isSpeaking={isSpeaking} volume={volume} isEmergency={isEmergency} />
                 </div>
                 
                 <div className="absolute top-8 left-8">
-                   <div className="flex items-center gap-3 px-4 py-2 rounded-xl bg-white/5 border border-white/10">
+                   <div className="flex items-center gap-3 px-5 py-2.5 rounded-xl bg-black/80 border-2 border-white/30 backdrop-blur-md shadow-2xl">
                       <Activity className={`w-4 h-4 ${isEmergency ? 'text-rose-500' : 'text-blue-400'}`} />
-                      <span className="text-[10px] font-black text-white/60 uppercase tracking-widest">LIVE VOICE MONITOR</span>
+                      <span className="text-[11px] font-black text-white uppercase tracking-[0.2em]">LIVE VOICE MONITOR</span>
                    </div>
                 </div>
             </div>
 
             {/* Transcription Area */}
-            <div className="flex-1 flex flex-col min-h-0 bg-black/20 overflow-hidden">
+            <div className="flex-1 flex flex-col min-h-0 bg-black/30 overflow-hidden">
                 <Transcript messages={messages} persona={leadDetails.agentPersona} />
             </div>
             
-            {/* Ticker - Restyled for Logistics */}
-            <footer className="h-16 bg-black/60 border-t border-white/10 flex items-center overflow-hidden shrink-0">
+            {/* Ticker */}
+            <footer className="h-16 bg-black/90 border-t border-white/20 flex items-center overflow-hidden shrink-0">
                <div className="flex items-center gap-16 animate-marquee whitespace-nowrap px-12">
                   <TickerItem label="MISSISSAUGA" status="TECH AVAILABILITY: HIGH" />
                   <TickerItem label="BRAMPTON" status="NEXT WINDOW: 2PM" />
@@ -211,7 +211,7 @@ const App: React.FC = () => {
             </footer>
         </section>
 
-        {/* Intelligence Side-Terminal - Re-styled for 'Dispatch File' */}
+        {/* Intelligence Side-Terminal */}
         <aside className="w-[480px] flex-shrink-0 flex flex-col bg-white z-20 overflow-hidden shadow-[-20px_0_50px_rgba(0,0,0,0.5)]">
             <div className="flex-1 overflow-y-auto custom-scrollbar">
                 <InfoPanel lead={leadDetails} isConnected={isConnected} />
@@ -221,15 +221,17 @@ const App: React.FC = () => {
       </main>
 
       <style>{`
-        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #64748b; }
         
         @keyframes marquee {
           0% { transform: translateX(0); }
           100% { transform: translateX(-50%); }
         }
         .animate-marquee {
-          animation: marquee 40s linear infinite;
+          animation: marquee 35s linear infinite;
         }
       `}</style>
     </div>
@@ -237,10 +239,10 @@ const App: React.FC = () => {
 };
 
 const TickerItem = ({ label, status }: any) => (
-  <div className="flex items-center gap-4">
-    <span className="text-[9px] font-black text-white/20 uppercase tracking-widest">{label}</span>
-    <span className="text-[10px] font-bold text-blue-400 uppercase tracking-tight">{status}</span>
-    <div className="w-1 h-1 rounded-full bg-white/10" />
+  <div className="flex items-center gap-5">
+    <span className="text-[11px] font-black text-white uppercase tracking-widest">{label}</span>
+    <span className="text-[12px] font-bold text-blue-400 uppercase tracking-tight">{status}</span>
+    <div className="w-1.5 h-1.5 rounded-full bg-white/40" />
   </div>
 );
 
