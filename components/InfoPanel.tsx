@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { LeadDetails } from '../types';
 import { 
   ShieldCheck, 
@@ -13,7 +13,8 @@ import {
   Home,
   Building2,
   Navigation,
-  FileText
+  FileText,
+  RefreshCw
 } from 'lucide-react';
 
 interface InfoPanelProps {
@@ -22,34 +23,52 @@ interface InfoPanelProps {
 }
 
 export const InfoPanel: React.FC<InfoPanelProps> = ({ lead, isConnected }) => {
+  const [isRefreshing, setIsRefreshing] = useState(false);
   const isHeritage = lead.address?.toLowerCase().includes('heritage') || 
                      lead.heatingSource === 'oil';
   const isMarcus = lead.agentPersona === 'marcus';
   const isEmergency = isMarcus || lead.type === 'emergency';
   const isCommercial = lead.marketType === 'commercial';
 
+  // Trigger "Data Refresh" animation on persona change
+  useEffect(() => {
+    setIsRefreshing(true);
+    const timer = setTimeout(() => setIsRefreshing(false), 800);
+    return () => clearTimeout(timer);
+  }, [lead.agentPersona]);
+
   return (
-    <div className="flex flex-col bg-white relative min-h-full font-sans">
+    <div className="flex flex-col bg-white relative min-h-full font-sans overflow-hidden">
+      
+      {/* Scanning Line Effect during refresh */}
+      {isRefreshing && (
+        <div className="absolute inset-0 z-50 pointer-events-none overflow-hidden">
+           <div className={`absolute top-0 left-0 w-full h-[2px] blur-[2px] animate-scan-down ${isEmergency ? 'bg-rose-500 shadow-[0_0_15px_rgba(225,29,72,0.8)]' : 'bg-blue-500 shadow-[0_0_15px_rgba(59,130,246,0.8)]'}`} />
+           <div className="absolute inset-0 bg-white/10 backdrop-blur-[2px] animate-pulse-fast" />
+        </div>
+      )}
+
       {/* Professional Service Header */}
       <div className={`h-40 relative overflow-hidden flex flex-col justify-end p-8 transition-all duration-1000 ${isEmergency ? 'bg-rose-900' : 'bg-slate-900'}`}>
         <div className="absolute inset-0 opacity-[0.15] pointer-events-none" style={{ backgroundImage: `linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)`, backgroundSize: '30px 30px' }} />
         
-        <div className="relative z-10">
+        <div className={`relative z-10 transition-all duration-500 ${isRefreshing ? 'translate-y-2 opacity-50 scale-95' : 'translate-y-0 opacity-100 scale-100'}`}>
           <div className="flex items-center gap-4 mb-3">
               <div className="p-2.5 rounded-xl bg-white/30 backdrop-blur-md border border-white/40 shadow-lg">
                 <FileText className="w-5 h-5 text-white" />
               </div>
-              <h3 className="text-[12px] font-black uppercase tracking-[0.4em] text-white">
+              <h3 className="text-[12px] font-black uppercase tracking-[0.4em] text-white flex items-center gap-2">
+                {isRefreshing && <RefreshCw className="w-3 h-3 animate-spin" />}
                 LIVE DISPATCH FILE
               </h3>
           </div>
           <h2 className="text-4xl font-black text-white tracking-tight uppercase leading-none">
-              {isCommercial ? 'Facility Profile' : 'Lead Intelligence'}
+              {isMarcus ? 'Marcus Protocol' : 'Sarah Advisor'}
           </h2>
         </div>
       </div>
 
-      <div className="p-8 space-y-10">
+      <div className={`p-8 space-y-10 transition-all duration-700 ${isRefreshing ? 'blur-[4px] opacity-70 grayscale' : 'blur-0 opacity-100 grayscale-0'}`}>
         {/* Status Badges */}
         <div className="flex flex-wrap gap-3">
           <div className={`px-5 py-2.5 rounded-xl flex items-center gap-3 border-2 transition-all shadow-md ${isCommercial ? 'bg-slate-900 border-slate-900 text-white' : 'bg-slate-100 border-slate-300 text-slate-900'}`}>
@@ -96,14 +115,14 @@ export const InfoPanel: React.FC<InfoPanelProps> = ({ lead, isConnected }) => {
         <div className="grid grid-cols-2 gap-5">
            <StatusCard 
               label="REQUEST TYPE"
-              value={lead.type || 'ANALYZING...'}
+              value={lead.type || (isRefreshing ? 'SYNCING...' : 'ANALYZING...')}
               icon={<BadgeAlert />}
               isActive={!!lead.type}
               isEmergency={isEmergency}
            />
            <StatusCard 
               label="FUEL SOURCE"
-              value={lead.heatingSource || 'ANALYZING...'}
+              value={lead.heatingSource || (isRefreshing ? 'SYNCING...' : 'ANALYZING...')}
               icon={<Zap />}
               isActive={!!lead.heatingSource}
               isEmergency={false}
@@ -118,8 +137,10 @@ export const InfoPanel: React.FC<InfoPanelProps> = ({ lead, isConnected }) => {
                       <div className="flex flex-col gap-2">
                         <span className="text-[11px] font-black text-blue-400 uppercase tracking-[0.2em]">DISPATCH STATUS</span>
                         <div className="flex items-center gap-4">
-                           <CheckCircle2 className="w-5 h-5 text-emerald-400" />
-                           <span className="text-sm font-black text-white uppercase tracking-wider">READY FOR DEPLOYMENT</span>
+                           <CheckCircle2 className={`w-5 h-5 ${isEmergency ? 'text-rose-400' : 'text-emerald-400'}`} />
+                           <span className="text-sm font-black text-white uppercase tracking-wider">
+                              {isMarcus ? 'MARCUS PRIORITY' : 'READY FOR DEPLOYMENT'}
+                           </span>
                         </div>
                       </div>
                       <Navigation className="w-8 h-8 text-white/60" />
@@ -136,6 +157,23 @@ export const InfoPanel: React.FC<InfoPanelProps> = ({ lead, isConnected }) => {
           </div>
         </div>
       </div>
+
+      <style>{`
+        @keyframes scan-down {
+          0% { top: -10%; }
+          100% { top: 110%; }
+        }
+        .animate-scan-down {
+          animation: scan-down 0.8s ease-in-out forwards;
+        }
+        @keyframes pulse-fast {
+          0%, 100% { opacity: 0; }
+          50% { opacity: 0.1; }
+        }
+        .animate-pulse-fast {
+          animation: pulse-fast 0.2s infinite;
+        }
+      `}</style>
     </div>
   );
 };
