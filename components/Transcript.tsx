@@ -32,6 +32,7 @@ export const Transcript: React.FC<TranscriptProps> = ({ messages, persona }) => 
         return {
           label: 'CUSTOMER',
           icon: <User className="w-6 h-6" />,
+          avatarUrl: null,
           avatarClass: 'bg-white/30 text-white border-2 border-white/50 w-16 h-16 rounded-2xl shadow-xl',
           contentClass: 'text-white font-semibold bg-white/10 border-2 border-white/30 p-8 rounded-3xl backdrop-blur-md border-l-8 border-l-white/60 shadow-2xl'
         };
@@ -39,10 +40,14 @@ export const Transcript: React.FC<TranscriptProps> = ({ messages, persona }) => 
         const isMarcus = persona === 'marcus';
         return {
           label: isMarcus ? 'DISPATCH: MARCUS' : 'ADVISOR: SARAH',
-          icon: isMarcus ? <Zap className="w-6 h-6 fill-current" /> : <Headset className="w-6 h-6" />,
+          icon: isMarcus ? <Zap className="w-4 h-4 fill-current" /> : <Headset className="w-4 h-4" />,
+          // Professional persona images from Unsplash
+          avatarUrl: isMarcus 
+            ? "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=200&h=200&auto=format&fit=crop" 
+            : "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=200&h=200&auto=format&fit=crop",
           avatarClass: isMarcus 
-            ? 'bg-rose-600 text-white shadow-2xl w-16 h-16 rounded-2xl border-2 border-rose-400' 
-            : 'bg-blue-600 text-white shadow-2xl w-16 h-16 rounded-2xl border-2 border-blue-400',
+            ? 'border-2 border-rose-500 shadow-[0_0_20px_rgba(225,29,72,0.4)] w-20 h-20 rounded-2xl overflow-hidden' 
+            : 'border-2 border-blue-500 shadow-[0_0_20px_rgba(59,130,246,0.4)] w-20 h-20 rounded-2xl overflow-hidden',
           contentClass: isMarcus
             ? 'text-white font-bold bg-rose-950/50 border-2 border-rose-500/60 p-10 rounded-3xl border-l-[16px] border-l-rose-600 shadow-2xl'
             : 'text-white font-bold bg-blue-950/50 border-2 border-blue-500/60 p-10 rounded-3xl border-l-[16px] border-l-blue-600 shadow-2xl'
@@ -51,6 +56,7 @@ export const Transcript: React.FC<TranscriptProps> = ({ messages, persona }) => 
         return {
           label: 'SYSTEM LOG',
           icon: <Info className="w-4 h-4" />,
+          avatarUrl: null,
           avatarClass: 'bg-white/20 text-white border border-white/40 w-10 h-10 rounded-xl mt-2',
           contentClass: 'text-white font-sans text-sm pl-6 border-l-4 border-white/50 py-3 italic bg-white/10 rounded-r-2xl shadow-lg'
         };
@@ -76,15 +82,26 @@ export const Transcript: React.FC<TranscriptProps> = ({ messages, persona }) => 
           return (
             <div key={msg.id} className={`flex gap-8 animate-in fade-in slide-in-from-bottom-10 duration-700 ${isSystem ? 'opacity-100 scale-[0.98]' : ''}`}>
               <div className="flex flex-col items-center pt-2 shrink-0">
-                 <div className={`relative flex items-center justify-center transition-all ${config.avatarClass}`}>
-                   {isAgent && (
-                     <div className={`absolute -top-2 -right-2 p-2 bg-white rounded-xl shadow-2xl flex items-center justify-center ring-4 ring-black/60`}>
-                       {isMarcus ? <AlertTriangle className="w-4 h-4 text-rose-600" /> : <ShieldCheck className="w-4 h-4 text-blue-600" />}
+                 <div className={`relative flex items-center justify-center transition-all bg-black ${config.avatarClass}`}>
+                   {config.avatarUrl ? (
+                     <img 
+                       src={config.avatarUrl} 
+                       alt={config.label} 
+                       className="w-full h-full object-cover grayscale-[0.2] hover:grayscale-0 transition-all duration-500"
+                     />
+                   ) : (
+                     <div className="relative z-10">
+                      {config.icon}
                      </div>
                    )}
-                   <div className="relative z-10">
-                    {config.icon}
-                   </div>
+                   
+                   {isAgent && (
+                     <div className={`absolute -top-3 -right-3 p-2 rounded-xl shadow-2xl flex items-center justify-center ring-4 ring-black/60 z-20 ${isMarcus ? 'bg-rose-600' : 'bg-blue-600'}`}>
+                       <span className="text-white">
+                         {config.icon}
+                       </span>
+                     </div>
+                   )}
                  </div>
               </div>
               
