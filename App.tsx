@@ -23,6 +23,7 @@ import {
   Instagram,
   Linkedin
 } from 'lucide-react';
+import { ChatWidget } from './components/ChatWidget';
 
 const App: React.FC = () => {
   const [activeFaq, setActiveFaq] = useState<number | null>(0);
@@ -527,6 +528,9 @@ const App: React.FC = () => {
           </button>
         )}
       </footer>
+
+      {/* Chat Widget Integration */}
+      <ChatWidget />
 
       <style>{`
         @keyframes fade-in {
